@@ -1,131 +1,113 @@
 "use client";
 
 import React, { useState } from "react";
+import { registerUser } from "../../firebase/firebase_config";
 
-const RegisterForm: React.FC = () => {
-  const [registerName, setRegisterName] = useState("");
+const RegisterForm = () => {
+  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError("");
-    if (!email || !password || !registerName) {
-      setError("Por favor, completa todos los campos.");
+    setSuccess("");
+
+    if (!username || !email || !password) {
+      setError("Completa todos los campos");
       return;
     }
-    // Aquí iría la lógica de registro
+
+    setLoading(true);
+
+    try {
+      const response = await registerUser(username, email, password);
+
+      if (response.success) {
+        setSuccess(response.message);
+        setUsername("");
+        setEmail("");
+        setPassword("");
+      } else {
+        setError(response.message);
+      }
+    } catch (err: any) {
+      setError(err.message || "Error desconocido");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <div style={{ marginBottom: 20 }}>
-        <label
-          htmlFor="name"
-          style={{
-            display: "block",
-            marginBottom: 6,
-            fontWeight: 500,
-            color: "#333",
-          }}
-        >
-          Nombre
-        </label>
+    <form
+      onSubmit={handleRegister}
+      className="max-w-md mx-auto bg-[#e9d79a]  p-8 shadow-lg rounded-lg"
+    >
+      {error && (
+        <p className="text-red-600 bg-red-100 border border-red-300 p-3 mb-4 rounded-md">
+          {error}
+        </p>
+      )}
+      {success && (
+        <p className="text-green-600 bg-green-100 border border-green-300 p-3 mb-4 rounded-md">
+          {success}
+        </p>
+      )}
+
+      <div className="mb-4">
+        <label className="block text-gray-700 font-medium mb-1">Nombre</label>
         <input
-          id="name"
           type="text"
-          value={registerName}
-          onChange={(e) => setRegisterName(e.target.value)}
-          style={{
-            width: "100%",
-            padding: "10px 12px",
-            border: "1px solid #d1d5db",
-            borderRadius: 6,
-            fontSize: 16,
-          }}
-          required
+          placeholder="Nombre"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          className="w-full p-3 bg-white border border-gray-300 rounded-md text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          disabled={loading}
+          autoComplete="username"
         />
       </div>
-      <div style={{ marginBottom: 20 }}>
-        <label
-          htmlFor="email"
-          style={{
-            display: "block",
-            marginBottom: 6,
-            fontWeight: 500,
-            color: "#333",
-          }}
-        >
-          Correo electrónico
-        </label>
+
+      <div className="mb-4">
+        <label className="block text-gray-700 font-medium mb-1">Correo</label>
         <input
-          id="email"
           type="email"
+          placeholder="correo@ejemplo.com"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          style={{
-            width: "100%",
-            padding: "10px 12px",
-            border: "1px solid #d1d5db",
-            borderRadius: 6,
-            fontSize: 16,
-          }}
-          required
+          className="w-full p-3 border bg-white  border-gray-300 rounded-md text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          disabled={loading}
+          autoComplete="email"
         />
       </div>
-      <div style={{ marginBottom: 20 }}>
-        <label
-          htmlFor="password"
-          style={{
-            display: "block",
-            marginBottom: 6,
-            fontWeight: 500,
-            color: "#333",
-          }}
-        >
+
+      <div className="mb-4">
+        <label className="block text-gray-700 font-medium mb-1">
           Contraseña
         </label>
         <input
-          id="password"
           type="password"
+          placeholder="********"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          style={{
-            width: "100%",
-            padding: "10px 12px",
-            border: "1px solid #d1d5db",
-            borderRadius: 6,
-            fontSize: 16,
-          }}
-          required
+          className="w-full p-3 border bg-white  border-gray-300 rounded-md text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          disabled={loading}
+          autoComplete="new-password"
         />
       </div>
-      {error && (
-        <div
-          style={{
-            color: "#e53e3e",
-            background: "#fff5f5",
-            border: "1px solid #fed7d7",
-            borderRadius: 6,
-            padding: "8px 12px",
-            marginBottom: 18,
-          }}
-        >
-          {error}
-        </div>
-      )}
+
       <button
         type="submit"
-        style={{
-          width: "100%",
-          padding: "12px 0",
-          background: "#2563eb",
-          color: "#fff",
-          borderRadius: 6,
-        }}
+        disabled={loading}
+        className={`w-full py-3 text-white font-medium rounded-md transition-colors ${
+          loading
+            ? "bg-blue-400 cursor-not-allowed"
+            : "bg-blue-600 hover:bg-blue-700"
+        }`}
       >
-        Registrarse
+        {loading ? "Registrando..." : "Registrarse"}
       </button>
     </form>
   );

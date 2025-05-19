@@ -3,89 +3,54 @@
 import React, { useState } from "react";
 
 const LoginForm: React.FC = () => {
-  const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const [registerName, setRegisterName] = useState("");
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
-    if (!email || !password || (!isLogin && !registerName)) {
+    if (!email || !password) {
       setError("Por favor, completa todos los campos.");
       return;
     }
-    // Aquí iría la lógica de login o registro
+    // Lógica de autenticación aquí
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      {!isLogin && (
-        <div style={{ marginBottom: 20 }}>
-          <label
-            htmlFor="name"
-            style={{
-              display: "block",
-              marginBottom: 6,
-              fontWeight: 500,
-              color: "#333",
-            }}
-          >
-            Nombre
-          </label>
-          <input
-            id="name"
-            type="text"
-            value={registerName}
-            onChange={(e) => setRegisterName(e.target.value)}
-            style={{
-              width: "100%",
-              padding: "10px 12px",
-              border: "1px solid #d1d5db",
-              borderRadius: 6,
-              fontSize: 16,
-            }}
-            required={!isLogin}
-          />
-        </div>
+    <form
+      onSubmit={handleSubmit}
+      className="max-w-md mx-auto bg-[#e9d79a] p-8 shadow-lg rounded-lg"
+    >
+      <h2 className="text-2xl font-semibold text-gray-700 mb-6 text-center">
+        Iniciar Sesión
+      </h2>
+
+      {error && (
+        <p className="text-red-600 bg-red-100 border border-red-300 p-3 mb-4 rounded-md">
+          {error}
+        </p>
       )}
-      <div style={{ marginBottom: 20 }}>
-        <label
-          htmlFor="email"
-          style={{
-            display: "block",
-            marginBottom: 6,
-            fontWeight: 500,
-            color: "#333",
-          }}
-        >
-          Correo electrónico
+
+      <div className="mb-4">
+        <label htmlFor="email" className="block text-gray-700 font-medium mb-1">
+          Correo Electrónico
         </label>
         <input
           id="email"
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          style={{
-            width: "100%",
-            padding: "10px 12px",
-            border: "1px solid #d1d5db",
-            borderRadius: 6,
-            fontSize: 16,
-          }}
+          placeholder="correo@ejemplo.com"
+          className="w-full p-3 bg-white border border-gray-300 rounded-md text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
           required
         />
       </div>
-      <div style={{ marginBottom: 20 }}>
+
+      <div className="mb-4">
         <label
           htmlFor="password"
-          style={{
-            display: "block",
-            marginBottom: 6,
-            fontWeight: 500,
-            color: "#333",
-          }}
+          className="block text-gray-700 font-medium mb-1"
         >
           Contraseña
         </label>
@@ -94,60 +59,17 @@ const LoginForm: React.FC = () => {
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          style={{
-            width: "100%",
-            padding: "10px 12px",
-            border: "1px solid #d1d5db",
-            borderRadius: 6,
-            fontSize: 16,
-          }}
+          placeholder="********"
+          className="w-full p-3 bg-white border border-gray-300 rounded-md text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
           required
         />
       </div>
-      {error && (
-        <div
-          style={{
-            color: "#e53e3e",
-            background: "#fff5f5",
-            border: "1px solid #fed7d7",
-            borderRadius: 6,
-            padding: "8px 12px",
-            marginBottom: 18,
-          }}
-        >
-          {error}
-        </div>
-      )}
+
       <button
         type="submit"
-        style={{
-          width: "100%",
-          padding: "12px 0",
-          background: "#2563eb",
-          color: "#fff",
-          borderRadius: 6,
-        }}
+        className="w-full py-3 text-white font-medium rounded-md bg-blue-600 hover:bg-blue-700 transition-colors"
       >
-        {isLogin ? "Entrar" : "Registrarse"}
-      </button>
-      <button
-        type="button"
-        onClick={() => {
-          setIsLogin(!isLogin);
-          setError("");
-        }}
-        style={{
-          width: "100%",
-          padding: "10px 0",
-          background: "transparent",
-          color: "#2563eb",
-          borderRadius: 6,
-          textDecoration: "underline",
-        }}
-      >
-        {isLogin
-          ? "¿No tienes cuenta? Regístrate"
-          : "¿Ya tienes cuenta? Inicia sesión"}
+        Iniciar Sesión
       </button>
     </form>
   );

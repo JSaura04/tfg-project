@@ -6,7 +6,7 @@ export default function Home() {
   return (
     <main>
       <HeaderMain />
-      <Link href="/pages/auth/login">
+      <Link href="./pages/auth/login">
         <Button className="bg-[#dbaf1e]">Link</Button>
       </Link>
     </main>
