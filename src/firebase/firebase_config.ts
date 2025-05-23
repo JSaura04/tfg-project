@@ -1,5 +1,6 @@
 import bcrypt from "bcryptjs";
 import { initializeApp } from "firebase/app";
+import { getAuth } from "firebase/auth";
 import { doc, getFirestore, setDoc } from "firebase/firestore";
 
 const firebaseConfig = {
@@ -12,6 +13,9 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
+
+const auth = getAuth(app);
+
 const db = getFirestore(app);
 
 const generateRandomId = (): string => {
@@ -44,4 +48,4 @@ export const registerUser = async (
   }
 };
 
-export { app, db };
+export { app, auth, db };

@@ -1,23 +1,24 @@
 "use client";
 
 import React, { useState } from "react";
+import Swal from "sweetalert2";
 import { registerUser } from "../../firebase/firebase_config";
 
 const RegisterForm = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const [success, setSuccess] = useState("");
 
   const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setError("");
-    setSuccess("");
 
     if (!username || !email || !password) {
-      setError("Completa todos los campos");
+      Swal.fire({
+        icon: "warning",
+        title: "Campos incompletos",
+        text: "Por favor completa todos los campos.",
+      });
       return;
     }
 
@@ -27,15 +28,28 @@ const RegisterForm = () => {
       const response = await registerUser(username, email, password);
 
       if (response.success) {
-        setSuccess(response.message);
+        Swal.fire({
+          icon: "success",
+          title: "Registro exitoso",
+          text: response.message,
+        });
+
         setUsername("");
         setEmail("");
         setPassword("");
       } else {
-        setError(response.message);
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: response.message,
+        });
       }
     } catch (err: any) {
-      setError(err.message || "Error desconocido");
+      Swal.fire({
+        icon: "error",
+        title: "Error inesperado",
+        text: err.message || "Ha ocurrido un error desconocido.",
+      });
     } finally {
       setLoading(false);
     }
@@ -44,19 +58,8 @@ const RegisterForm = () => {
   return (
     <form
       onSubmit={handleRegister}
-      className="max-w-md mx-auto bg-[#e9d79a]  p-8 shadow-lg rounded-lg"
+      className="max-w-md mx-auto bg-[#e9d79a] p-8 shadow-lg rounded-lg"
     >
-      {error && (
-        <p className="text-red-600 bg-red-100 border border-red-300 p-3 mb-4 rounded-md">
-          {error}
-        </p>
-      )}
-      {success && (
-        <p className="text-green-600 bg-green-100 border border-green-300 p-3 mb-4 rounded-md">
-          {success}
-        </p>
-      )}
-
       <div className="mb-4">
         <label className="block text-gray-700 font-medium mb-1">Nombre</label>
         <input
@@ -77,7 +80,7 @@ const RegisterForm = () => {
           placeholder="correo@ejemplo.com"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="w-full p-3 border bg-white  border-gray-300 rounded-md text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full p-3 border bg-white border-gray-300 rounded-md text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
           disabled={loading}
           autoComplete="email"
         />
@@ -92,7 +95,7 @@ const RegisterForm = () => {
           placeholder="********"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="w-full p-3 border bg-white  border-gray-300 rounded-md text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full p-3 border bg-white border-gray-300 rounded-md text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
           disabled={loading}
           autoComplete="new-password"
         />
