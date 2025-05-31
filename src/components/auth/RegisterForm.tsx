@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Swal from "sweetalert2";
-import { registerUser } from "../../firebase/firebase_config";
+import { registerUser } from "../../configs/auth/firebase_config";
 
 const RegisterForm = () => {
   const [username, setUsername] = useState("");

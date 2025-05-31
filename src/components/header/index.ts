@@ -1,1 +1,1 @@
-export * from "./HeaderMain";
+export * from "./components";

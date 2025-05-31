@@ -2,14 +2,16 @@
 
 import bcrypt from "bcryptjs";
 import { collection, getDocs, query, where } from "firebase/firestore";
+import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import Swal from "sweetalert2";
-import { db } from "../../firebase/firebase_config";
+import { db } from "../../configs/auth/firebase_config";
 
 const LoginForm: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -38,26 +40,31 @@ const LoginForm: React.FC = () => {
       const userData = userDoc.data();
 
       const isPasswordValid = bcrypt.compareSync(password, userData.password);
-
       if (!isPasswordValid) {
         throw new Error("Contraseña incorrecta.");
       }
 
       // Guardar cookie con datos del usuario (7 días)
-      document.cookie = `user=${encodeURIComponent(
-        JSON.stringify({
-          id: userDoc.id,
-          nombre: userData.nombre,
-          correo: userData.correo,
-        })
-      )}; path=/; max-age=${60 * 60 * 24 * 7}`;
+      const userCookie = {
+        id: userDoc.id,
+        nombre: userData.nombre,
+        correo: userData.correo,
+      };
 
+      document.cookie = `user=${encodeURIComponent(
+        JSON.stringify(userCookie)
+      )}; path=/; max-age=${60 * 60 * 24 * 7}`; // 7 días
+
+      // Mostrar bienvenida y redirigir
       Swal.fire({
         icon: "success",
         title: `Bienvenido, ${userData.nombre}!`,
         text: "Has iniciado sesión correctamente.",
+      }).then(() => {
+        router.push("/pages/main"); // Redirección
       });
 
+      // Limpiar campos
       setEmail("");
       setPassword("");
     } catch (err: any) {

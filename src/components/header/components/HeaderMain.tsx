@@ -3,7 +3,10 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { getUserFromCookie, UserCookieData } from "../auth/getCookies";
+import {
+  getUserFromCookie,
+  UserCookieData,
+} from "../../../configs/auth/getCookies";
 
 export const HeaderMain = () => {
   const [user, setUser] = useState<UserCookieData | null>(null);
@@ -20,9 +23,6 @@ export const HeaderMain = () => {
       </Link>
       <div className="flex-1 flex justify-center">
         <h1 className="text-white text-3xl font-bold">PicIt</h1>
-      </div>
-      <div className="mr-4 text-white font-medium">
-        {user ? user.nombre : ""}
       </div>
     </div>
   );

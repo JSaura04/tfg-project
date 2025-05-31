@@ -1,4 +1,4 @@
-import { Button } from "@/components/primitives";
+import AuthRedirectButton from "@/components/auth/AuthRedirectButton";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -23,11 +23,10 @@ export default function Home() {
         <p className="max-w-xl mb-10 text-lg sm:text-xl drop-shadow-md">
           Captura y comparte momentos únicos con nuestra plataforma de fotos.
         </p>
-        <Link href="./pages/auth/login">
-          <Button className="bg-[#dbaf1e] px-8 py-3 text-xl font-semibold rounded shadow-lg hover:bg-yellow-500 transition-colors">
-            Iniciar sesión
-          </Button>
-        </Link>
+
+        <AuthRedirectButton />
+
+        <Link href="./pages/auth/login"></Link>
       </div>
     </main>
   );
