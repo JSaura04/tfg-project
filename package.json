@@ -9,12 +9,16 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@google-cloud/storage": "^7.16.0",
     "@sglara/cn": "^1.0.0",
     "bcryptjs": "^3.0.2",
+    "cloudinary": "^2.6.1",
     "firebase": "^11.7.3",
     "js-cookie": "^3.0.5",
+    "lucide-react": "^0.511.0",
     "next": "15.3.2",
     "next-auth": "^4.24.11",
+    "next-cloudinary": "^6.16.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-easy-crop": "^5.4.2",

@@ -1,4 +1,5 @@
 "use client";
+import { FooterMain } from "@/components/footer/FooterMain";
 import { HeaderNav } from "@/components/header/components/HeaderNav";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -36,15 +37,8 @@ export default function HomePage() {
           Inspírate, descubre y guarda lo que te gusta en la red visual más
           creativa: PicIt.
         </p>
-        <button
-          onClick={handleUpload}
-          className="bg-[#dbaf1e] hover:bg-yellow-500 transition-colors text-white px-6 py-3 rounded-xl font-semibold shadow-lg"
-        >
-          Subir Imagen
-        </button>
       </section>
 
-      {/* Galería tipo Pinterest */}
       <section className="px-4 py-10 max-w-7xl mx-auto">
         <div className="columns-1 sm:columns-2 md:columns-3 lg:columns-4 gap-4 space-y-4">
           {images.map((src, index) => (
@@ -65,9 +59,7 @@ export default function HomePage() {
       </section>
 
       {/* Footer */}
-      <footer className="text-center text-sm text-gray-500 py-6 mt-10 border-t">
-        © 2025 PicIt. Todos los derechos reservados.
-      </footer>
+      <FooterMain />
     </div>
   );
 }

@@ -1,7 +1,8 @@
 import bcrypt from "bcryptjs";
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
-import { doc, getFirestore, setDoc } from "firebase/firestore";
+import { doc, getFirestore, setDoc, updateDoc } from "firebase/firestore";
+import { getStorage } from "firebase/storage";
 
 const firebaseConfig = {
   apiKey: "AIzaSyD3rBu0ob-MDCf8R4puq-1qwjBBaNAiU4M",
@@ -15,6 +16,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
+const storage = getStorage(app);
 
 const generateRandomId = (): string => {
   return Math.floor(100000 + Math.random() * 900000).toString();
@@ -72,4 +74,24 @@ export const registerUser = async (
   }
 };
 
-export { app, auth, db };
+// lib/firebase/updatePost.ts
+
+/**
+ * Actualiza los datos de una imagen en Firestore.
+ * @param id ID del documento (imagen).
+ * @param title Nuevo título.
+ * @param description Nueva descripción.
+ */
+export async function updatePost(
+  id: string,
+  title: string,
+  description: string
+) {
+  const ref = doc(db, "images", id);
+  await updateDoc(ref, {
+    title,
+    description,
+  });
+}
+
+export { app, auth, db, storage };
