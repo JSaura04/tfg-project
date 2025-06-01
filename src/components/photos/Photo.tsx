@@ -1,10 +1,18 @@
 "use client";
 
 import { db, updatePost } from "@/configs/auth/firebase_config";
-import { deleteDoc, doc } from "firebase/firestore";
-import { Edit, Trash2 } from "lucide-react";
+import {
+  arrayRemove,
+  arrayUnion,
+  deleteDoc,
+  doc,
+  onSnapshot,
+  updateDoc,
+} from "firebase/firestore";
+import { Edit, Heart, HeartOff, Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+
+import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 
 export type UserImage = {
@@ -14,6 +22,7 @@ export type UserImage = {
   description: string;
   creatorId: string;
   publicId: string;
+  likes?: string[];
 };
 
 type PhotoProps = {
@@ -30,8 +39,25 @@ export function Photo({
   onDeleteComplete,
 }: PhotoProps) {
   const [loading, setLoading] = useState(false);
+  const [likes, setLikes] = useState<string[]>(image.likes || []);
   const router = useRouter();
   const isOwner = image.creatorId === currentUserId;
+
+  const imageRef = doc(db, "images", image.id);
+
+  const hasLiked = likes.includes(currentUserId);
+
+  // 🔁 Escucha en tiempo real
+  useEffect(() => {
+    const unsubscribe = onSnapshot(imageRef, (snapshot) => {
+      const data = snapshot.data();
+      if (data?.likes) {
+        setLikes(data.likes);
+      }
+    });
+
+    return () => unsubscribe();
+  }, [image.id]);
 
   const handleDelete = async (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -49,14 +75,14 @@ export function Photo({
 
     try {
       setLoading(true);
-      await deleteDoc(doc(db, "images", image.id));
+      await deleteDoc(imageRef);
       Swal.fire(
         "Eliminado",
         "La imagen se ha eliminado correctamente.",
         "success"
       );
       onDeleteComplete?.();
-      router.refresh(); // También puedes recargar al eliminar si deseas
+      router.refresh();
     } catch (err) {
       console.error(err);
       Swal.fire(
@@ -75,9 +101,9 @@ export function Photo({
     const { value: formValues } = await Swal.fire({
       title: "Editar imagen",
       html: `
-      <input id="swal-input-title" class="swal2-input" placeholder="Título" value="${image.title}">
-      <textarea id="swal-input-description" class="swal2-textarea" placeholder="Descripción">${image.description}</textarea>
-    `,
+        <input id="swal-input-title" class="swal2-input" placeholder="Título" value="${image.title}">
+        <textarea id="swal-input-description" class="swal2-textarea" placeholder="Descripción">${image.description}</textarea>
+      `,
       focusConfirm: false,
       showCancelButton: true,
       confirmButtonText: "Guardar",
@@ -110,13 +136,44 @@ export function Photo({
         "success"
       );
       onDeleteComplete?.();
-      // Forzar recarga completa
       window.location.reload();
     } catch (err) {
       console.error(err);
       Swal.fire("Error", "No se pudo actualizar la imagen", "error");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const toggleLike = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+
+    const imageRef = doc(db, "images", image.id);
+    const userRef = doc(db, "users", currentUserId);
+
+    try {
+      if (hasLiked) {
+        // Quitar like de la imagen
+        await updateDoc(imageRef, {
+          likes: arrayRemove(currentUserId),
+        });
+        // Quitar imagen de favoritos del usuario
+        await updateDoc(userRef, {
+          likedImages: arrayRemove(image.id), // Cambia likedImages por el nombre correcto en tu DB
+        });
+      } else {
+        // Añadir like a la imagen
+        await updateDoc(imageRef, {
+          likes: arrayUnion(currentUserId),
+        });
+        // Añadir imagen a favoritos del usuario
+        await updateDoc(userRef, {
+          likedImages: arrayUnion(image.id), // Cambia likedImages por el nombre correcto en tu DB
+        });
+      }
+    } catch (err) {
+      console.error("Error al actualizar likes:", err);
+      Swal.fire("Error", "No se pudo actualizar el me gusta.", "error");
     }
   };
 
@@ -131,6 +188,7 @@ export function Photo({
       }}
       aria-label={`Ver detalles de la foto: ${image.title}`}
     >
+      {/* Botones del dueño */}
       {isOwner && (
         <div className="absolute top-2 right-2 flex space-x-2 z-10">
           <button
@@ -152,12 +210,33 @@ export function Photo({
         </div>
       )}
 
+      {/* Botón de like y contador */}
+      <div className="absolute bottom-2 right-2 z-10 flex items-center space-x-1 bg-white bg-opacity-80 px-2 py-1 rounded">
+        <button
+          onClick={toggleLike}
+          title={hasLiked ? "Quitar me gusta" : "Dar me gusta"}
+          className="text-red-500"
+        >
+          {hasLiked ? (
+            <Heart className="w-5 h-5 fill-red-500" />
+          ) : (
+            <HeartOff className="w-5 h-5" />
+          )}
+        </button>
+        <span className="text-xs font-medium text-gray-700">
+          {likes.length}
+        </span>
+      </div>
+
+      {/* Imagen */}
       <img
         src={image.imageUrl}
         alt={image.title}
         className="w-full h-full object-cover transform transition-transform duration-300 hover:scale-110"
         loading="lazy"
       />
+
+      {/* Título */}
       <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-40 text-white text-sm p-2 truncate">
         {image.title}
       </div>

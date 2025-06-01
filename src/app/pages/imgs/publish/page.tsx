@@ -87,6 +87,8 @@ export default function UploadPage() {
         authorName: user.nombre,
         imageUrl,
         createdAt: serverTimestamp(),
+        likesCount: 0,
+        likedBy: [],
       });
 
       Swal.fire("¡Éxito!", "Imagen publicada con éxito.", "success");

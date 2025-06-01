@@ -63,17 +63,17 @@ export const HeaderNav = () => {
       </h1>
 
       <nav className="flex gap-4 text-sm font-medium items-center">
-      <Link
-        href="/pages/imgs/publish"
-        className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded transition font-semibold"
-      >
-        Publicar
-      </Link>
-       
-        <Link href="/explore" className="hover:text-yellow-600">
+        <Link
+          href="/pages/imgs/publish"
+          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded transition font-semibold"
+        >
+          Publicar
+        </Link>
+
+        <Link href="" className="hover:text-yellow-600">
           Explorar
         </Link>
-        <Link href="/about" className="hover:text-yellow-600">
+        <Link href="" className="hover:text-yellow-600">
           Foros
         </Link>
 

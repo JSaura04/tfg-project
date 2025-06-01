@@ -1,23 +1,26 @@
 "use client";
+
 import { FooterMain } from "@/components/footer/FooterMain";
 import { HeaderNav } from "@/components/header/components/HeaderNav";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
-const images = [
-  "/gallery/img1.jpg",
-  "/gallery/img2.jpg",
-  "/gallery/img3.jpg",
-  "/gallery/img4.jpg",
-  "/gallery/img5.jpg",
-  "/gallery/img6.jpg",
-  "/gallery/img7.jpg",
-  "/gallery/img8.jpg",
-  // Añade tus propias imágenes reales
-];
+// URLs de imágenes aleatorias de Picsum Photos con IDs específicos para variedad y consistencia
+const picsumImageIds = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120];
 
 export default function HomePage() {
   const router = useRouter();
+
+  const [shuffledImages, setShuffledImages] = useState<string[]>([]);
+
+  useEffect(() => {
+    const shuffled = [...picsumImageIds]
+      .sort(() => Math.random() - 0.5)
+      .slice(0, 8)
+      .map((id) => `https://picsum.photos/id/${id}/500/500`);
+    setShuffledImages(shuffled);
+  }, []);
 
   const handleUpload = () => {
     router.push("/upload");
@@ -25,10 +28,7 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-neutral-100 text-gray-800">
-      {/* Header */}
       <HeaderNav />
-
-      {/* Hero */}
       <section className="text-center py-16 px-4 bg-white">
         <h2 className="text-4xl md:text-5xl font-extrabold mb-4">
           Comparte tu mundo en imágenes
@@ -41,24 +41,27 @@ export default function HomePage() {
 
       <section className="px-4 py-10 max-w-7xl mx-auto">
         <div className="columns-1 sm:columns-2 md:columns-3 lg:columns-4 gap-4 space-y-4">
-          {images.map((src, index) => (
-            <div
-              key={index}
-              className="break-inside-avoid overflow-hidden rounded-xl shadow"
-            >
-              <Image
-                src={src}
-                alt={`Foto ${index + 1}`}
-                width={500}
-                height={500}
-                className="w-full h-auto object-cover hover:scale-105 transition-transform duration-200"
-              />
-            </div>
-          ))}
+          {shuffledImages.length > 0 ? (
+            shuffledImages.map((src, index) => (
+              <div
+                key={index}
+                className="break-inside-avoid overflow-hidden rounded-xl shadow"
+              >
+                <Image
+                  src={src}
+                  alt={`Imagen aleatoria ${index + 1}`}
+                  width={500}
+                  height={500}
+                  className="w-full h-auto object-cover hover:scale-105 transition-transform duration-200"
+                  priority={index === 0} // Para priorizar la primera imagen
+                />
+              </div>
+            ))
+          ) : (
+            <p className="text-center col-span-full">Cargando imágenes...</p>
+          )}
         </div>
       </section>
-
-      {/* Footer */}
       <FooterMain />
     </div>
   );
