@@ -1,5 +1,6 @@
 "use client";
 
+import { LanguageSelector } from "@/components/language/LanguageSelector";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -17,13 +18,23 @@ export const HeaderMain = () => {
   }, []);
 
   return (
-    <div className="w-full bg-[#dbaf1e] flex items-center justify-between p-4">
-      <Link href="/">
-        <Image src="/logo-thumbnail.png" alt="Logo" width={100} height={150} />
-      </Link>
-      <div className="flex-1 flex justify-center">
-        <h1 className="text-white text-3xl font-bold">PicIt</h1>
+    <header className="w-full bg-[#dbaf1e]">
+      <div className="max-w-6xl mx-auto flex items-center justify-between px-6 py-4">
+        {/* Logo */}
+        <Link href="/" className="flex items-center gap-3">
+          <Image
+            src="/logo-thumbnail.png"
+            alt="PicIt logo"
+            width={42}
+            height={42}
+          />
+        </Link>
+
+        {/* Brand */}
+        <h1 className="text-white text-2xl font-bold tracking-wide">PicIt</h1>
+
+        <LanguageSelector />
       </div>
-    </div>
+    </header>
   );
 };

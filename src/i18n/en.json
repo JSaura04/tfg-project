@@ -1,0 +1,23 @@
+{
+  "header": {
+    "start": "Welcome to Lake View Hotel"
+  },
+  "footer": {
+    "description": "Enjoy the best experience by the lake. Luxury rooms, spa, and activities for the whole family.",
+    "copyright": "All rights reserved."
+  },
+  "links": {
+    "home": "Home",
+    "book": "Book Now",
+    "rooms": "Rooms",
+    "reviews": "Reviews",
+    "about": "About Us",
+    "services": "Services",
+    "contact": "Contact",
+    "login": "Login"
+  },
+  "languages": {
+    "EN": "English",
+    "ES": "Spanish"
+  }
+}

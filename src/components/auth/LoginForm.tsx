@@ -44,7 +44,6 @@ const LoginForm: React.FC = () => {
         throw new Error("Contraseña incorrecta.");
       }
 
-      // Guardar cookie con datos del usuario (7 días)
       const userCookie = {
         id: userDoc.id,
         nombre: userData.nombre,
@@ -55,13 +54,12 @@ const LoginForm: React.FC = () => {
         JSON.stringify(userCookie)
       )}; path=/; max-age=${60 * 60 * 24 * 7}`; // 7 días
 
-      // Mostrar bienvenida y redirigir
       Swal.fire({
         icon: "success",
         title: `Bienvenido, ${userData.nombre}!`,
         text: "Has iniciado sesión correctamente.",
       }).then(() => {
-        router.push("/pages/main"); // Redirección
+        router.push("/pages/main");
       });
 
       // Limpiar campos
@@ -81,15 +79,21 @@ const LoginForm: React.FC = () => {
   return (
     <form
       onSubmit={handleSubmit}
-      className="max-w-md mx-auto bg-[#e9d79a] p-8 shadow-lg rounded-lg"
+      className="max-w-md mx-auto bg-white p-8 shadow-xl rounded-2xl border border-gray-100"
     >
-      <h2 className="text-2xl font-semibold text-gray-700 mb-6 text-center">
-        Iniciar Sesión
+      <h2 className="text-3xl font-bold text-gray-800 mb-2 text-center">
+        Bienvenido
       </h2>
+      <p className="text-sm text-gray-500 mb-8 text-center">
+        Ingresa tus credenciales para continuar
+      </p>
 
-      <div className="mb-4">
-        <label htmlFor="email" className="block text-gray-700 font-medium mb-1">
-          Correo Electrónico
+      <div className="mb-5">
+        <label
+          htmlFor="email"
+          className="block text-sm font-semibold text-gray-600 mb-2"
+        >
+          Correo electrónico
         </label>
         <input
           id="email"
@@ -97,15 +101,15 @@ const LoginForm: React.FC = () => {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder="correo@ejemplo.com"
-          className="w-full p-3 bg-white border border-gray-300 rounded-md text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full px-4 py-3 rounded-lg border border-gray-300 text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
           required
         />
       </div>
 
-      <div className="mb-4">
+      <div className="mb-6">
         <label
           htmlFor="password"
-          className="block text-gray-700 font-medium mb-1"
+          className="block text-sm font-semibold text-gray-600 mb-2"
         >
           Contraseña
         </label>
@@ -114,8 +118,8 @@ const LoginForm: React.FC = () => {
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          placeholder="********"
-          className="w-full p-3 bg-white border border-gray-300 rounded-md text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          placeholder="••••••••"
+          className="w-full px-4 py-3 rounded-lg border border-gray-300 text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
           required
         />
       </div>
@@ -123,13 +127,13 @@ const LoginForm: React.FC = () => {
       <button
         type="submit"
         disabled={loading}
-        className={`w-full py-3 text-white font-medium rounded-md transition-colors ${
+        className={`w-full py-3 rounded-lg text-white font-semibold transition-all duration-200 ${
           loading
             ? "bg-blue-400 cursor-not-allowed"
-            : "bg-blue-600 hover:bg-blue-700"
+            : "bg-blue-600 hover:bg-blue-700 hover:shadow-lg active:scale-[0.98]"
         }`}
       >
-        {loading ? "Entrando..." : "Iniciar Sesión"}
+        {loading ? "Entrando..." : "Iniciar sesión"}
       </button>
     </form>
   );

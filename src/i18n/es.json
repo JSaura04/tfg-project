@@ -1,0 +1,23 @@
+{
+  "header": {
+    "start": "Bienvenido al Hotel Lake View"
+  },
+  "footer": {
+    "description": "Disfruta de la mejor experiencia junto al lago. Habitaciones de lujo, spa y actividades para toda la familia.",
+    "copyright": "Todos los derechos reservados."
+  },
+  "links": {
+    "home": "Inicio",
+    "book": "Reservar ahora",
+    "rooms": "Habitaciones",
+    "reviews": "Reseñas",
+    "about": "Sobre nosotros",
+    "services": "Servicios",
+    "contact": "Contacto",
+    "login": "Iniciar sesión"
+  },
+  "languages": {
+    "EN": "Inglés",
+    "ES": "Español"
+  }
+}

@@ -1,7 +1,7 @@
 export const FooterMain = () => {
   return (
-    <footer className="text-center text-sm bg-black py-6 border-t text-white mt-12">
-      © 2025 PicIt. Todos los derechos reservados.
+    <footer className="bg-black py-6 text-center text-sm text-gray-400">
+      © {new Date().getFullYear()} PicIt. Todos los derechos reservados.
     </footer>
   );
 };

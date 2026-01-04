@@ -10,10 +10,7 @@ const RegisterPage: React.FC = () => {
     <div className="min-h-screen bg-gray-100 flex flex-col">
       <HeaderMain />
       <div className="flex-1 flex items-center justify-center">
-        <div className="max-w-sm w-full bg-white rounded-lg shadow-lg p-8">
-          <h2 className="text-center text-2xl font-semibold text-gray-800 mb-7">
-            Registrarse
-          </h2>
+        <div className="max-w-sm w-full p-8">
           <RegisterForm />
           <div className="text-center mt-4">
             <Link
